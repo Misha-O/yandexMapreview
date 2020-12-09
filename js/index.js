@@ -100,6 +100,7 @@ function init() {
 
   addButton.addEventListener("click", () => {
     if (inputName.value && inputPlace.value && inputComment.value) {
+      e.preventDefault();
       // receive review address
       const addressLink = address.innerText;
 
@@ -127,7 +128,7 @@ function init() {
         coordinates,
         {
           balloonContentHeader: inputPlace.value,
-          balloonContentBody: `<a onclick="openBalloonFull()" class="balloon__address_link">${addressLink}</a><br><br>${inputComment.value}<br><br>`,
+          balloonContentBody: `${addressLink} ${inputComment.value}`,
           balloonContentFooter: currentTime,
         },
         {
