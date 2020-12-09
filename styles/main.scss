@@ -1,0 +1,166 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;600&display=swap");
+$bgColor: #ff8663;
+
+#map {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+.logo__btm {
+  user-select: none;
+  position: absolute;
+  right: 3%;
+  bottom: 3%;
+  width: 100px;
+  height: 80px;
+
+  & .logo__img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.balloon__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  min-width: 350px;
+  min-height: 320px;
+  font-family: "Fira Sans";
+  font-size: 15px;
+  border-radius: 10px;
+  padding-bottom: 15px;
+  display: none;
+
+  & .balloon__header {
+    min-height: 40px;
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+    border-radius: 12px;
+    background-color: $bgColor;
+    color: #fff;
+    border-radius: 5px 5px 0 0;
+    font-size: 12px;
+
+    & .address {
+      margin-top: 10px;
+      margin-left: 10px;
+    }
+
+    & .btn__close {
+      user-select: none;
+      font-size: 20px;
+      color: #fff;
+      background-color: $bgColor;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  & .balloon__comments {
+    margin: 10px;
+    width: 85%;
+    flex: 1;
+  }
+
+  & form {
+    display: flex;
+    flex: 2;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    & h3 {
+      font-size: 16px;
+      color: $bgColor;
+      font-weight: 500;
+      text-transform: uppercase;
+      margin-right: auto;
+      margin-left: 30px;
+    }
+
+    & .form__row {
+      display: flex;
+      margin: 8px;
+      width: 85%;
+
+      & .form__input {
+        padding: 15px;
+        width: 100%;
+        border-radius: 16px;
+        border: 1px solid #c4c4c4;
+
+        &:focus {
+          outline: none;
+          border-color: #000;
+        }
+      }
+
+      & .form__textarea {
+        padding: 15px;
+        border-radius: 16px;
+        border: 1px solid #c4c4c4;
+        resize: none;
+
+        &:focus {
+          outline: none;
+          border-color: #000;
+        }
+      }
+    }
+    & .btn__add {
+      display: block;
+      width: 87px;
+      height: 30px;
+      border-radius: 10px;
+      background-color: $bgColor;
+      color: #fff;
+      font-size: 12px;
+      margin-left: auto;
+      margin-right: 30px;
+
+      &:hover {
+        opacity: 0.8;
+        cursor: pointer;
+        text-transform: uppercase;
+      }
+    }
+  }
+}
+.hidden {
+  display: none;
+}
+// map placemark
+
+.pin {
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  background-color: $bgColor;
+  position: absolute;
+  transform: rotate(-45deg);
+  left: 50%;
+  top: 50%;
+  margin: -20px 0 0 -20px;
+  animation-name: bounce;
+  animation-fill-mode: both;
+  animation-duration: 1s;
+
+  &::after {
+    content: "";
+    width: 14px;
+    height: 14px;
+    margin: 8px 0 0 8px;
+    background-color: #fff;
+    position: absolute;
+    border-radius: 50%;
+  }
+}
