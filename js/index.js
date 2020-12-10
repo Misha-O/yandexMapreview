@@ -6,7 +6,8 @@ const inputName = document.querySelector("#inputName");
 const inputPlace = document.querySelector("#inputPlace");
 const inputComment = document.querySelector("#inputComment");
 const comments = document.querySelector(".balloon__comments");
-const placemarks = []; // to use for cluster function openBalloonFull()
+const placemarks = []; // to use for cluster
+let storage; //for local storage
 
 async function mapInit() {
   try {
@@ -40,7 +41,9 @@ function init() {
     clusterDisableClickZoom: true,
     clusterHideIconOnBalloonOpen: false,
     geoObjectHideIconOnBalloonOpen: false,
+    // Элементами внешнего вида панели навигации будут маркеры
     clusterOpenBalloonOnClick: true,
+    // design "карусель"
     clusterBalloonContentLayout: "cluster#balloonCarousel",
     clusterBalloonPanelMaxMapArea: 0,
     clusterBalloonContentLayoutWidth: 200,
@@ -52,13 +55,13 @@ function init() {
   clusterer.add(placemarks);
   myMap.geoObjects.add(clusterer);
 
-  // listen for map dbclicks
+  // listen for map clicks
 
   myMap.events.add("click", (e) => {
     const coords = e.get("coords");
     coordinates = coords;
 
-    comments.innerHTML = "Отзывов пока нет...";
+    comments.innerHTML = "No reviews yet...";
 
     // pop window with reviews and form
     openBalloon();
@@ -68,9 +71,23 @@ function init() {
     getAddress(coords);
   });
 
-  // create placemark with given coords on dblclick
+  // make own pin icon
+  // const FontAwesomeLayout = ymaps.templateLayoutFactory.createClass(
+  //   '<i class="fas fa-map-marker-alt" style="color:#8d8c8c"></i>'
+  // );
+
+  // create placemark with given coords and style on click
   function createPlacemark(coords) {
-    return new ymaps.Placemark(coords);
+    return new ymaps.Placemark(
+      coords,
+      {},
+      {
+        iconLayout: "default#image",
+        iconImageHref: "../img/mapPinDefault.png",
+        iconImageSize: [30, 42],
+        iconImageOffset: [-15, -42],
+      }
+    );
   }
 
   // define address by coords (обратное геокодирование)
@@ -98,9 +115,9 @@ function init() {
 
   // with same dblclick if all inputs are entered, create date/time of review, receive address from prev func and create inside API Placemark custom markup from input fields
 
-  addButton.addEventListener("click", () => {
+  addButton.addEventListener("click", (e) => {
+    e.preventDefault();
     if (inputName.value && inputPlace.value && inputComment.value) {
-      e.preventDefault();
       // receive review address
       const addressLink = address.innerText;
 
@@ -147,8 +164,8 @@ function init() {
       if (comments.innerHTML === "Отзывов пока нет...") {
         comments.innerHTML = "";
       }
-      newPlacemark.commentContent = `<div><span><b>${inputName.value}</b></span>
-        <span>${inputPlace.value}</span>
+      newPlacemark.commentContent = `<div><b>${inputName.value}</b>
+        <b>${inputPlace.value}</b>
         <span>${currentTime}:</span><br>
         <span>${inputComment.value}</span></div><br>`;
       comments.innerHTML += newPlacemark.commentContent;
@@ -187,19 +204,7 @@ function openBalloon() {
   myBalloon.style.display = "block";
 }
 
-// balloon content from placemarks
-function openBalloonFull() {
-  address.innerText = "";
-  comments.innerHTML = "";
-  const addressLink = document.querySelector(".balloon__address_link");
-
-  for (let i = 0; i < placemarks.length; i++) {
-    if (addressLink.innerText === placemarks[i].place) {
-      address.innerText = placemarks[i].place;
-      comments.innerHTML += placemarks[i].commentContent;
-    }
-  }
-  myBalloon.style.top = event.clientY + "px";
-  myBalloon.style.left = event.clientX + "px";
-  myBalloon.style.display = "block";
+function saveToLocalStorage(e) {
+  storage = localStorage;
+  storage.data = JSON.stringify();
 }
