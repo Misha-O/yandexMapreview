@@ -7,7 +7,7 @@ const inputPlace = document.querySelector("#inputPlace");
 const inputComment = document.querySelector("#inputComment");
 const comments = document.querySelector(".balloon__comments");
 const placemarks = []; // to use for cluster
-let storage; //for local storage
+let storage = localStorage; //for local storage
 
 async function mapInit() {
   try {
@@ -21,7 +21,7 @@ async function mapInit() {
 mapInit();
 
 function init() {
-  let myPlacemark;
+  let myAddress;
   let coordinates; //to access coordinates in all functions
 
   // map creation
@@ -66,28 +66,14 @@ function init() {
     // pop window with reviews and form
     openBalloon();
 
-    // create GeoObject
-    myPlacemark = createPlacemark(coords);
+    // get address from click
+    myAddress = getAddressByCoordinates(coords);
     getAddress(coords);
   });
 
-  // make own pin icon
-  // const FontAwesomeLayout = ymaps.templateLayoutFactory.createClass(
-  //   '<i class="fas fa-map-marker-alt" style="color:#8d8c8c"></i>'
-  // );
-
-  // create placemark with given coords and style on click
-  function createPlacemark(coords) {
-    return new ymaps.Placemark(
-      coords,
-      {},
-      {
-        iconLayout: "default#image",
-        iconImageHref: "../img/mapPinDefault.png",
-        iconImageSize: [30, 42],
-        iconImageOffset: [-15, -42],
-      }
-    );
+  // create object with data from given coords
+  function getAddressByCoordinates(coords) {
+    return new ymaps.Placemark(coords);
   }
 
   // define address by coords (обратное геокодирование)
@@ -95,7 +81,7 @@ function init() {
     ymaps.geocode(coords).then(function (resolve) {
       const firstGeoObject = resolve.geoObjects.get(0);
 
-      myPlacemark.properties.set({
+      myAddress.properties.set({
         // create  string with data from the object
         iconCaption: [
           // get the name of place or territory
@@ -149,9 +135,12 @@ function init() {
           balloonContentFooter: currentTime,
         },
         {
-          preset: "islands#nightDotIcon",
+          iconLayout: "default#image",
+          iconImageHref: "./img/mapPinActive.png",
+          iconImageSize: [30, 42],
+          iconImageOffset: [-15, -42],
           draggable: false,
-          openBalloonOnClick: false, // because we use custom
+          openBalloonOnClick: false,
         }
       );
 
@@ -204,7 +193,11 @@ function openBalloon() {
   myBalloon.style.display = "block";
 }
 
-function saveToLocalStorage(e) {
-  storage = localStorage;
-  storage.data = JSON.stringify();
-}
+// function saveToLocalStorage() {
+//   console.log("it works !");
+//   storage.data = JSON.stringify({
+//     inputName: inputName.value,
+//     inputPlace: inputPlace.value,
+//     inputComment: inputComment.value,
+//   });
+// }
