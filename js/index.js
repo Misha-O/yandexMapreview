@@ -104,6 +104,7 @@ function init() {
   addButton.addEventListener("click", (e) => {
     e.preventDefault();
     if (inputName.value && inputPlace.value && inputComment.value) {
+      console.log("This is inputName.value", inputName.value);
       // receive review address
       const addressLink = address.innerText;
 
@@ -155,7 +156,7 @@ function init() {
       }
       newPlacemark.commentContent = `<div><b>${inputName.value}</b>
         <b>${inputPlace.value}</b>
-        <span>${currentTime}:</span><br>
+        <span>${currentTime}: </span><br>
         <span>${inputComment.value}</span></div><br>`;
       comments.innerHTML += newPlacemark.commentContent;
       newPlacemark.place = address.innerText;
@@ -171,6 +172,27 @@ function init() {
     } else {
       alert("Please fill up all the fields !");
     }
+
+    function saveToLocalStorage(
+      coordinates,
+      inputName,
+      inputPlace,
+      inputComment
+    ) {
+      const myData = {
+        coordinates,
+        review: {
+          inputName: inputName.value,
+          inputPlace: inputPlace.value,
+          inputComment: inputComment.value,
+        },
+      };
+
+      storage.data = JSON.stringify(myData);
+      console.log(storage.data);
+    }
+
+    saveToLocalStorage(coordinates);
   });
 }
 
@@ -193,11 +215,16 @@ function openBalloon() {
   myBalloon.style.display = "block";
 }
 
-// function saveToLocalStorage() {
-//   console.log("it works !");
-//   storage.data = JSON.stringify({
-//     inputName: inputName.value,
-//     inputPlace: inputPlace.value,
-//     inputComment: inputComment.value,
-//   });
+// function saveToLocalStorage(coordinates, inputName.value, inputPlace.value, inputComment.value) {
+//   const myData = {
+//     coordinates,
+//     review: {
+//       inputName: inputName.value,
+//       inputPlace: inputPlace.value,
+//       inputComment: inputComment.value,
+//     },
+//   };
+
+//   storage.data = JSON.stringify(myData);
+//   console.log(storage.data);
 // }
