@@ -38,13 +38,12 @@ function init() {
   // create cluster of placemarks
   const clusterer = new ymaps.Clusterer({
     preset: "islands#invertedNightClusterIcons",
-    groupByCoordinates: false,
-    clusterDisableClickZoom: true,
-    clusterHideIconOnBalloonOpen: false,
+    groupByCoordinates: false, // to group markers not only with same coords, but adjacent
+    clusterDisableClickZoom: true, // turn off zoom on cluster click
+    clusterHideIconOnBalloonOpen: false, // not to hide icon on click
     geoObjectHideIconOnBalloonOpen: false,
-    // Элементами внешнего вида панели навигации будут маркеры
-    clusterOpenBalloonOnClick: true,
-    // design "карусель"
+    clusterOpenBalloonOnClick: true, //to open balloon layout on click
+    // design "carousel"
     clusterBalloonContentLayout: "cluster#balloonCarousel",
     clusterBalloonPanelMaxMapArea: 0,
     clusterBalloonContentLayoutWidth: 200,
@@ -222,28 +221,28 @@ function loadFromLocalStorage() {
   if (storageArray.length >= 0) {
     storageArray.push(dataToUpload);
 
-    for (const [key, value] of Object.entries(dataToUpload)) {
-      console.log(value);
-    }
-    // for (const key in dataToUpload) {
-    //   console.log(key[0]);
-    // return new ymaps.Placemark(
-    //   coordinates,
-    //   {
-    //     balloonContentHeader: inputPlace.value,
-    //     balloonContentBody: `${addressLink} ${inputComment.value}`,
-    //     balloonContentFooter: currentTime,
-    //   },
-    //   {
-    //     iconLayout: "default#image",
-    //     iconImageHref: "./img/mapPinActive.png",
-    //     iconImageSize: [30, 42],
-    //     iconImageOffset: [-15, -42],
-    //     draggable: false,
-    //     openBalloonOnClick: false,
-    //   }
-    // );
-    // }
+    storageArray.forEach((elem) => {
+      console.log("this is elem: ", elem);
+      const marker = new ymaps.Placemark(
+        elem.coordinates,
+        {
+          balloonContentHeader: elem.inputName,
+          balloonContentBody: elem.inputPlace,
+          balloonContentFooter: elem.inputComment,
+        },
+        {
+          iconLayout: "default#image",
+          iconImageHref: "./img/mapPinActive.png",
+          iconImageSize: [30, 42],
+          iconImageOffset: [-15, -42],
+          draggable: false,
+          openBalloonOnClick: false,
+        }
+      );
+
+      clusterer.add(marker);
+      placemarks.push(marker);
+      myMap.geoObjects.add(marker);
+    });
   }
-  console.log("this is storage: ", storageArray);
 }
