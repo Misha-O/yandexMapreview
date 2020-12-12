@@ -8,6 +8,7 @@ const inputComment = document.querySelector("#inputComment");
 const comments = document.querySelector(".balloon__comments");
 const placemarks = []; // to use for cluster
 let storage = localStorage; //for local storage
+const storageArray = []; //to store all elements and fetch it if page reloaded
 
 async function mapInit() {
   try {
@@ -104,7 +105,6 @@ function init() {
   addButton.addEventListener("click", (e) => {
     e.preventDefault();
     if (inputName.value && inputPlace.value && inputComment.value) {
-      console.log("This is inputName.value", inputName.value);
       // receive review address
       const addressLink = address.innerText;
 
@@ -161,6 +161,10 @@ function init() {
       comments.innerHTML += newPlacemark.commentContent;
       newPlacemark.place = address.innerText;
 
+      // saves inputs to local Storage
+      saveToLocalStorage(coordinates, inputName, inputPlace, inputComment);
+
+      loadFromLocalStorage();
       // clear all fields of our balloon
       clearInputs();
 
@@ -172,27 +176,6 @@ function init() {
     } else {
       alert("Please fill up all the fields !");
     }
-
-    function saveToLocalStorage(
-      coordinates,
-      inputName,
-      inputPlace,
-      inputComment
-    ) {
-      const myData = {
-        coordinates,
-        review: {
-          inputName: inputName.value,
-          inputPlace: inputPlace.value,
-          inputComment: inputComment.value,
-        },
-      };
-
-      storage.data = JSON.stringify(myData);
-      console.log(storage.data);
-    }
-
-    saveToLocalStorage(coordinates);
   });
 }
 
@@ -215,16 +198,52 @@ function openBalloon() {
   myBalloon.style.display = "block";
 }
 
-// function saveToLocalStorage(coordinates, inputName.value, inputPlace.value, inputComment.value) {
-//   const myData = {
-//     coordinates,
-//     review: {
-//       inputName: inputName.value,
-//       inputPlace: inputPlace.value,
-//       inputComment: inputComment.value,
-//     },
-//   };
+function saveToLocalStorage(coordinates, inputName, inputPlace, inputComment) {
+  const myData = {
+    coordinates,
+    review: {
+      inputName: inputName.value,
+      inputPlace: inputPlace.value,
+      inputComment: inputComment.value,
+    },
+  };
+  storage.data = JSON.stringify(myData);
+}
 
-//   storage.data = JSON.stringify(myData);
-//   console.log(storage.data);
-// }
+function loadFromLocalStorage() {
+  const myData = JSON.parse(storage.data);
+
+  const dataToUpload = {
+    coordinates: myData.coordinates,
+    inputName: myData.review.inputName,
+    inputPlace: myData.review.inputPlace,
+    inputComment: myData.review.inputComment,
+  };
+  if (storageArray.length >= 0) {
+    storageArray.push(dataToUpload);
+
+    for (const [key, value] of Object.entries(dataToUpload)) {
+      console.log(value);
+    }
+    // for (const key in dataToUpload) {
+    //   console.log(key[0]);
+    // return new ymaps.Placemark(
+    //   coordinates,
+    //   {
+    //     balloonContentHeader: inputPlace.value,
+    //     balloonContentBody: `${addressLink} ${inputComment.value}`,
+    //     balloonContentFooter: currentTime,
+    //   },
+    //   {
+    //     iconLayout: "default#image",
+    //     iconImageHref: "./img/mapPinActive.png",
+    //     iconImageSize: [30, 42],
+    //     iconImageOffset: [-15, -42],
+    //     draggable: false,
+    //     openBalloonOnClick: false,
+    //   }
+    // );
+    // }
+  }
+  console.log("this is storage: ", storageArray);
+}
