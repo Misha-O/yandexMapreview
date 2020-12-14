@@ -43,16 +43,49 @@ function init() {
     clusterHideIconOnBalloonOpen: false, // not to hide icon on click
     geoObjectHideIconOnBalloonOpen: false,
     clusterOpenBalloonOnClick: true, //to open balloon layout on click
-    // design "carousel"
-    clusterBalloonContentLayout: "cluster#balloonCarousel",
+    // design "accordion"
+    clusterBalloonContentLayout: "cluster#balloonAccordion",
     clusterBalloonPanelMaxMapArea: 0,
     clusterBalloonContentLayoutWidth: 200,
-    clusterBalloonContentLayoutHeight: 250,
+    clusterBalloonContentLayoutHeight: 300,
     clusterBalloonPagerSize: 10,
     clusterBalloonPagerType: "marker",
   });
 
-  clusterer.add(placemarks);
+  // function loadFromLocalStorage() {
+  //   const myData = JSON.parse(storage.data);
+  //   console.log("func from load", myData);
+
+  //   if (myData.length >= 0) {
+  //     myData.forEach((elem) => {
+  //       console.log("this is elem: ", elem);
+  //       const marker = new ymaps.Placemark(
+  //         elem.coordinates,
+  //         {
+  //           balloonContentHeader: elem.inputName,
+  //           balloonContentBody: elem.inputPlace,
+  //           balloonContentFooter: elem.inputComment,
+  //         },
+  //         {
+  //           iconLayout: "default#image",
+  //           iconImageHref: "./img/mapPinActive.png",
+  //           iconImageSize: [30, 42],
+  //           iconImageOffset: [-15, -42],
+  //           draggable: false,
+  //           openBalloonOnClick: false,
+  //         }
+  //       );
+
+  //       clusterer.add(marker);
+  //       // placemarks.push(marker);
+  //       // myMap.geoObjects.add(marker);
+  //     });
+  //   }
+  // }
+
+  // loadFromLocalStorage();
+
+  // clusterer.add(placemarks);
   myMap.geoObjects.add(clusterer);
 
   // listen for map clicks
@@ -99,6 +132,11 @@ function init() {
     });
   }
 
+  // const fontLayoutClass = ymaps.templateLayoutFactory.createClass(
+  //   '<div><i class="fas fa-map-marker-alt"></i></div>',
+  //   {}
+  // );
+
   // with same dblclick if all inputs are entered, create date/time of review, receive address from prev func and create inside API Placemark custom markup from input fields
 
   addButton.addEventListener("click", (e) => {
@@ -135,6 +173,8 @@ function init() {
           balloonContentFooter: currentTime,
         },
         {
+          // iconLayout: fontLayoutClass,
+          // hasballon: false
           iconLayout: "default#image",
           iconImageHref: "./img/mapPinActive.png",
           iconImageSize: [30, 42],
@@ -163,7 +203,6 @@ function init() {
       // saves inputs to local Storage
       saveToLocalStorage(coordinates, inputName, inputPlace, inputComment);
 
-      loadFromLocalStorage();
       // clear all fields of our balloon
       clearInputs();
 
@@ -206,43 +245,6 @@ function saveToLocalStorage(coordinates, inputName, inputPlace, inputComment) {
       inputComment: inputComment.value,
     },
   };
-  storage.data = JSON.stringify(myData);
-}
-
-function loadFromLocalStorage() {
-  const myData = JSON.parse(storage.data);
-
-  const dataToUpload = {
-    coordinates: myData.coordinates,
-    inputName: myData.review.inputName,
-    inputPlace: myData.review.inputPlace,
-    inputComment: myData.review.inputComment,
-  };
-  if (storageArray.length >= 0) {
-    storageArray.push(dataToUpload);
-
-    storageArray.forEach((elem) => {
-      console.log("this is elem: ", elem);
-      const marker = new ymaps.Placemark(
-        elem.coordinates,
-        {
-          balloonContentHeader: elem.inputName,
-          balloonContentBody: elem.inputPlace,
-          balloonContentFooter: elem.inputComment,
-        },
-        {
-          iconLayout: "default#image",
-          iconImageHref: "./img/mapPinActive.png",
-          iconImageSize: [30, 42],
-          iconImageOffset: [-15, -42],
-          draggable: false,
-          openBalloonOnClick: false,
-        }
-      );
-
-      clusterer.add(marker);
-      placemarks.push(marker);
-      myMap.geoObjects.add(marker);
-    });
-  }
+  storageArray.push(myData);
+  storage.data = JSON.stringify(storageArray);
 }
