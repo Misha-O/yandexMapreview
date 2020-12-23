@@ -1,0 +1,25 @@
+<div class="review-container">
+    <div class="review-container__header">
+        <div class="review-container__header-left-block">
+            <svg class="svg-geo">
+                <use xlink:href="./src/img/geo.svg#geo"></use>
+            </svg>
+            <span class="review-container__address">{{ position }}</span>
+        </div>
+        <button type="button" class="close-reviews"></button>
+    </div>
+    <ul class="reviews">
+        <li class="reviews-item">
+            No reviews yet ...
+        </li>
+    </ul>
+    <form action="" id="forms">
+        <h3 class="headline">Your review:</h3>
+        <input type="text" placeholder="Your name" name="autor-name" class="i-name style-input">
+        <input type="text" placeholder="Specify the place" name="place" class="i-place style-input">
+        <textarea name="write-reviews" placeholder="Share your thoughts ..." class="i-area"></textarea>
+        <div class="btn-container">
+            <button type="button" class="i-btn">Add</button>
+        </div>
+    </form>
+</div>

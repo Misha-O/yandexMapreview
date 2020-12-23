@@ -1,5 +1,9 @@
 # Graduation Project №1 for LoftSchool "Yandex Map Review"
 
+1. npm init
+2. npm i
+3. npm start
+
 App consists of yandex map and usage of its API.
 
 - Any point in the map can be chosen. Reviews can be left.

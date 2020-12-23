@@ -1,6 +1,2 @@
-.vscode/
-dist/
-test.html
-indexTrial.js
-mainTrial.scss
-mainTrial.css
+node_modules
+.vscode
